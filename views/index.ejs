@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,48 +8,99 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        #navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        #navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        #navbar .nav-buttons a {
+            text-decoration: none;
+            color: white;
+            background-color: #0056b3;
+            padding: 8px 15px;
+            margin-left: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar .nav-buttons a:hover {
+            background-color: #003f8f;
+        }
+
+        #main-container {
+            padding: 20px;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
         }
+
         #chat-container {
             border: 1px solid #ccc;
             padding: 20px;
             margin-bottom: 20px;
             height: 400px;
             overflow-y: auto;
+            background-color: #fff;
+            border-radius: 5px;
         }
+
         #input-container {
             display: flex;
             gap: 10px;
         }
+
         #message-input {
             flex-grow: 1;
             padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
+
         button {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .message {
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 5px;
         }
+
         .user-message {
             background-color: #e9ecef;
         }
+
         .bot-message {
             background-color: #f8f9fa;
         }
+
         #loading {
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             text-align: center;
             padding: 10px;
             background-color: #f0f0f0;
@@ -58,15 +110,27 @@
         }
     </style>
 </head>
+
 <body>
-    <h1>Team SARANG</h1>
-    <h2>Social Media Performance Analysis</h2>
-    <p><b>Tip:</b>Ask question like "which type of posts is give me best result?"</p>
-    <div id="chat-container"></div>
-    <div id="loading">Typing...</div> <!-- Loading message -->
-    <div id="input-container">
-        <input type="text" id="message-input" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
+    <!-- Navigation Bar -->
+    <div id="navbar">
+        <h1>SARANG</h1>
+        <div class="nav-buttons">
+            <a href="https://github.com/ad1tyayadav/sarang" target="_blank">GitHub</a>
+            <a href="https://youtu.be/CFgFlkZSLkI?si=ddNVUmyxdVnd3rIq" target="_blank">YouTube</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-container">
+        <h2>Social Media Performance Analysis</h2>
+        <p><b>Tip:</b> Ask questions like "Which type of posts give me the best result?"</p>
+        <div id="chat-container"></div>
+        <div id="loading">Typing...(Sometime its take some time)</div> <!-- Loading message -->
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Ask anything about posts...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
 
     <script>
@@ -91,7 +155,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         message,
                         userId: 'user-' + Date.now() // Simple user ID generation
                     })
@@ -127,4 +191,5 @@
         });
     </script>
 </body>
+
 </html>
