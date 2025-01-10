@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Langflow Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #chat-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        #input-container {
+            display: flex;
+            gap: 10px;
+        }
+        #message-input {
+            flex-grow: 1;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #e9ecef;
+        }
+        .bot-message {
+            background-color: #f8f9fa;
+        }
+        #loading {
+            display: none; /* Hidden by default */
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            font-style: italic;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Langflow Chat Interface</h1>
+    <div id="chat-container"></div>
+    <div id="loading">Bot is typing...</div> <!-- Loading message -->
+    <div id="input-container">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const loading = document.getElementById('loading');  // Loading element
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage('You: ' + message, 'user-message');
+            messageInput.value = ''; // Clear input field
+
+            // Show the loading indicator
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message,
+                        userId: 'user-' + Date.now() // Simple user ID generation
+                    })
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    addMessage('Error: ' + data.error, 'bot-message');
+                } else {
+                    addMessage('Bot: ' + data.response, 'bot-message');
+                }
+            } catch (error) {
+                addMessage('Error: Could not send message', 'bot-message');
+            } finally {
+                // Hide the loading indicator when the response is received
+                loading.style.display = 'none';
+            }
+        }
+
+        function addMessage(message, className) {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message ' + className;
+            messageElement.textContent = message;
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll to latest message
+        }
+
+        // Send message on Enter key press
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
